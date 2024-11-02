@@ -28,6 +28,24 @@ size_t WriteCallback(void *data, size_t size, size_t nmemb, void *userp) {
   return totalSize;
 }
 
+char *get_slack_auth_header() {
+  const char *token = getenv("SLACK_TOKEN");
+  if (token == NULL) {
+    fprintf(stderr, "Error: SLACK_TOKEN environment variable not set\n");
+    return NULL;
+  }
+
+  // Allocate memory for the header string
+  char *auth_header = malloc(1024);
+  if (auth_header == NULL) {
+    fprintf(stderr, "Error: Memory allocation failed\n");
+    return NULL;
+  }
+
+  snprintf(auth_header, 1024, "Authorization: Bearer %s", token);
+  return auth_header;
+}
+
 int main(void) {
   CURL *curl;
   CURLcode res;
@@ -49,8 +67,15 @@ int main(void) {
     struct curl_slist *chunk = NULL;
 
     /* Remove a header curl would otherwise add by itself */
-    // set Authorization: Bearer xoxb-....
-    chunk = curl_slist_append(chunk, "");
+    char *auth_header = get_slack_auth_header();
+    if (auth_header == NULL) {
+      curl_easy_cleanup(curl);
+      curl_global_cleanup();
+      return 1;
+    }
+
+    chunk = curl_slist_append(chunk, auth_header);
+    free(auth_header);
 
     /* set our custom set of headers */
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);

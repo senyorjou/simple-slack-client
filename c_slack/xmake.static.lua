@@ -1,20 +1,10 @@
--- add_rules("mode.debug", "mode.release")
--- set_languages("c99")
--- add_requires("libcurl", "cjson")
-
--- target("c_slack")
---     set_kind("binary")
---     add_files("src/*.c")
---     add_packages("cjson", "libcurl")
-
-
 add_requires("libcurl", { system = false, static = true })
 add_requires("cjson", { system = false, static = true })
 add_requires("openssl", { system = false, static = true }) -- libcurl might need this
 
-target("slack_client")                                   -- or whatever name you want for your binary
+target("slack_client_static")                              -- or whatever name you want for your binary
 set_kind("binary")
-add_files("src/*.c")                                     -- assuming your main.c is in src directory
+add_files("src/*.c")                                       -- assuming your main.c is in src directory
 
 -- Static linking flags
 add_ldflags("-static", { force = true })
