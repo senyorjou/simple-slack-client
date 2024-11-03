@@ -6,7 +6,7 @@ const process = std.process;
 
 const dt = @import("datetime.zig");
 
-const Topic = struct { value: []const u9, creator: []const u8, last_set: u32 };
+const Topic = struct { value: []const u8, creator: []const u8, last_set: u32 };
 const Purpose = struct { value: []const u8, creator: []const u8, last_set: u32 };
 const ResponseMetadata = struct { next_cursor: []const u8 };
 const Channel = struct {
