@@ -4,6 +4,9 @@ const http = std.http;
 const json = std.json;
 const process = std.process;
 
+const time = std.time;
+const epoch = std.time.epoch;
+
 const dt = @import("datetime.zig");
 
 const Topic = struct { value: []const u8, creator: []const u8, last_set: u32 };
@@ -15,7 +18,7 @@ const Channel = struct {
     is_channel: bool,
     is_group: bool,
     is_im: bool,
-    created: u32,
+    created: u64,
     creator: []const u8,
     is_archived: bool,
     is_general: bool,
@@ -82,11 +85,10 @@ pub fn getSlackConversations(allocator: std.mem.Allocator) !void {
     });
 
     std.debug.print("Number of channels: {d}\n", .{channels.channels.len});
-
-    // List all channel names
-    std.debug.print("Channel names:\n", .{});
+    std.debug.print("Created\t\tUpdated\t\tMembers\tName\n", .{});
     for (channels.channels) |channel| {
-        std.debug.print("- {s} [{d}]\n", .{ channel.name, channel.num_members });
+        const created = dt.epochToDateStr(channel.created);
+        const updated = dt.epochToDateStr(channel.updated / 1000);
+        std.debug.print("{s}\t{s}\t[{d}]\t{s}\n", .{ created, updated, channel.num_members, channel.name });
     }
-    // std.debug.print("DT {s}", .{dt.timestampToDateTime(1727853324)});
 }

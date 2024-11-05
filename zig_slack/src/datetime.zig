@@ -1,30 +1,15 @@
 const std = @import("std");
+const epoch = std.time.epoch;
 
-const DateTime = struct {
-    year: u16,
-    month: u8,
-    day: u8,
-    hour: u8,
-    minute: u8,
-    second: u8,
-};
+pub fn epochToDateStr(timestamp: u64) []const u8 {
+    const secs = epoch.EpochSeconds{ .secs = timestamp };
+    const day = secs.getEpochDay();
+    const year_day = day.calculateYearDay();
+    const month_day = year_day.calculateMonthDay();
+    const month = month_day.month.numeric();
 
-pub fn timestampToDateTime(timestamp: u64) DateTime {
-    const epoch_seconds = timestamp;
-    const epoch = std.time.epoch.EpochSeconds{ .secs = epoch_seconds };
-    const epoch_day = epoch.getEpochDay();
-    const day_seconds = epoch.getDaySeconds();
-
-    const year_day = std.time.epoch.YearAndDay.fromEpochDay(epoch_day);
-    const month_day = std.time.epoch.MonthAndDay.fromYearDay(year_day.year, year_day.day);
-    const time = std.time.epoch.SecondsInDay.fromSeconds(day_seconds);
-
-    return DateTime{
-        .year = year_day.year,
-        .month = month_day.month,
-        .day = month_day.day,
-        .hour = time.getHoursIntoDay(),
-        .minute = time.getMinutesIntoHour(),
-        .second = time.getSecondsIntoMinute(),
-    };
+    const allocator = std.heap.page_allocator;
+    const date_string = std.fmt.allocPrint(allocator, "{d}/{d:0>2}/{d:0>2}", .{ year_day.year, month, month_day.day_index }) catch unreachable;
+    // defer allocator.free(date_string);
+    return date_string;
 }
