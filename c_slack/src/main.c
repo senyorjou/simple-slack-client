@@ -9,6 +9,11 @@ struct Memory {
   size_t size;
 };
 
+/*    fooo */
+
+
+
+
 size_t WriteCallback(void *data, size_t size, size_t nmemb, void *userp) {
   size_t totalSize = size * nmemb;
   struct Memory *mem = (struct Memory *)userp;
