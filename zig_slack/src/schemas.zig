@@ -29,3 +29,62 @@ const Channel = struct {
 };
 
 pub const Channels = struct { ok: bool, channels: []Channel, response_metadata: ResponseMetadata };
+
+pub const UserProfile = struct {
+    title: []const u8,
+    phone: []const u8,
+    skype: []const u8,
+    real_name: []const u8,
+    real_name_normalized: []const u8,
+    display_name: []const u8,
+    display_name_normalized: []const u8,
+    fields: ?[]const u8,  // This is null in the response
+    status_text: []const u8,
+    status_emoji: []const u8,
+    status_emoji_display_info: [][]const u8,
+    status_expiration: i64,
+    avatar_hash: []const u8,
+    image_original: []const u8,
+    is_custom_image: bool,
+    huddle_state: []const u8,
+    huddle_state_expiration_ts: i64,
+    first_name: []const u8,
+    last_name: []const u8,
+    image_24: []const u8,
+    image_32: []const u8,
+    image_48: []const u8,
+    image_72: []const u8,
+    image_192: []const u8,
+    image_512: []const u8,
+    image_1024: []const u8,
+    status_text_canonical: []const u8,
+    team: []const u8,
+};
+
+pub const User = struct {
+    id: []const u8,
+    team_id: []const u8,
+    name: []const u8,
+    deleted: bool,
+    color: []const u8,
+    real_name: []const u8,
+    tz: []const u8,
+    tz_label: []const u8,
+    tz_offset: i32,
+    profile: UserProfile,
+    is_admin: bool,
+    is_owner: bool,
+    is_primary_owner: bool,
+    is_restricted: bool,
+    is_ultra_restricted: bool,
+    is_bot: bool,
+    is_app_user: bool,
+    updated: i64,
+    is_email_confirmed: bool,
+    who_can_share_contact_card: []const u8,
+};
+
+pub const UserResponse = struct {
+    ok: bool,
+    user: User,
+};
