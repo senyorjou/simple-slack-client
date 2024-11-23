@@ -31,9 +31,9 @@ pub fn main() !void {
         const updated = dt.epochToDateStr(channel.updated / 1000);
         std.debug.print("{s}\t{s}\t[{d}]\t{s}\n", .{ created, updated, channel.num_members, channel.name });
     }
-    const client2 = try slack_client.Client.init(allocator);
+    // const client2 = try slack_client.Client.init(allocator);
 
-    var user_response = try client2.getUserInfo("U02M3TMTV9B");
+    var user_response = try client.getUserInfo("U02M3TMTV9B");
     defer user_response.deinit();
     const user = user_response.body.user;
     std.debug.print("User: {s} ({s})\n", .{ user.real_name, user.name });
