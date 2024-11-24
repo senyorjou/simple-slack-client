@@ -14,16 +14,14 @@ export interface SlackChannel {
   is_shared: boolean
   is_org_shared: boolean
   is_pending_ext_shared: boolean
-  // biome-ignore lint:
-  pending_shared: any[]
+  pending_shared: unknown[]
   context_team_id: string
   updated: number
   parent_conversation: null | string
   creator: string
   is_ext_shared: boolean
   shared_team_ids: string[]
-  // biome-ignore lint:
-  pending_connected_team_ids: any[]
+  pending_connected_team_ids: unknown[]
   is_member: boolean
   topic: {
     value: string
